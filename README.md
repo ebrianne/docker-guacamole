@@ -2,7 +2,7 @@
 
 ![Build/Push (master)](https://github.com/ebrianne/docker-guacamole/workflows/Build/Push%20(master)/badge.svg?branch=master)
 [![Docker Pulls](https://img.shields.io/docker/pulls/ebrianne/docker-guacamole.svg)](https://hub.docker.com/r/ebrianne/docker-guacamole/)
-[![GitHub issues](https://img.shields.io/github/issues/ebrianne/docker-guacamole?style=for-the-badge)](https://github.com/ebrianne/docker-guacamole/issues)
+[![GitHub issues](https://img.shields.io/github/issues/ebrianne/docker-guacamole)](https://github.com/ebrianne/docker-guacamole/issues)
 
 ## Acknowledgments
 
@@ -19,6 +19,7 @@ $ docker run -v /your/storage/path/to/config/:/config \
 ```
 
 ## Docker Compose
+
 ```
 version: '3'
 services:
@@ -30,3 +31,4 @@ services:
       ports:
         - '8080:8080'
       image: ebrianne/docker-guacamole
+```

@@ -51,6 +51,8 @@ RUN set -x && \
 
 FROM alpine:3.14
 
+LABEL maintainer="Eldwan Brianne"
+
 # Copy build outputs
 COPY --from=guacbuilder /buildout /
 
