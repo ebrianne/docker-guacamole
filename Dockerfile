@@ -69,7 +69,7 @@ ENV GUAC_VER=1.3.0 \
 
 # Apply the s6-overlay
 RUN apk add curl \
-    && if [[ "${TARGETARCH}" = "arm64" ]]; then export ARCH="aarch64" ; else ARCH="${TARGETARCH}"; fi \
+    && case ${TARGETARCH} in arm|arm/v7) ARCH="armhf" ;; arm/v6) ARCH="arm" ;; arm64|arm/v8) ARCH="aarch64" ;; 386) ARCH="x86" ;; amd64) ARCH="amd64" ;; esac \
     && curl -SL -o /tmp/s6-overlay-${ARCH}-installer "https://github.com/just-containers/s6-overlay/releases/download/${OVERLAY_VERSION}/s6-overlay-${ARCH}-installer" \
     && chmod +x /tmp/s6-overlay-${ARCH}-installer \
     && /tmp/s6-overlay-${ARCH}-installer / \
@@ -80,11 +80,13 @@ RUN echo "**** install packages ****" && \
     cairo font-terminus-nerd \
     glib libcrypto1.1 libjpeg-turbo libpng libpulse libssh2 \
     libssl1.1 libvncserver libwebp libwebsockets \
-    pango postgresql openjdk11-jre tzdata && \
+    pango postgresql tzdata && \
     apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/edge/testing \
     ossp-uuid=1.6.2-r1 && \
     apk add --no-cache --repository=http://dl-cdn.alpinelinux.org/alpine/v3.13/community \
-    freerdp-libs=2.2.0-r0 ffmpeg-libs=4.3.1-r4
+    freerdp-libs=2.2.0-r0 ffmpeg-libs=4.3.1-r4 \
+    && case ${TARGETARCH} in arm|arm/v7|arm/v6) JAVA_PACKAGE=openjdk8-jre ;; arm64|arm/v8) JAVA_PACKAGE=openjdk11-jre ;; 386) JAVA_PACKAGE=openjdk8-jre ;; amd64) JAVA_PACKAGE=openjdk11-jre ;; esac \ 
+    && apk add ${JAVA_PACKAGE}
 
 # Install tomcat
 RUN set -x \
